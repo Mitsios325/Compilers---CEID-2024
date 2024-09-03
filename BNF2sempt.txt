@@ -1,0 +1,112 @@
+<program> ::= <class_declaration> | <program> <class_declaration> | <comment>
+
+<class_declaration> ::= "public class" <class_name> "{" <class_body> "}"
+
+<class_body> ::= <class_content> | <class_body> <class_content> | <comment>
+
+<class_content> ::= <variable_declaration> | <method_declaration> | <class_declaration> | <comment>
+
+<variable_declaration> ::= [<modifier>] <var_type> <identifier> <semicolon> | <comment>
+
+<method_declaration> ::= [<modifier>] <return_type> <identifier> "(" <parameters> ")" "{" <method_body> "}"
+
+<method_body> ::= <statement> | <method_body> <statement> | <comment>
+
+<statement> ::= <variable_declaration> | <assignment_statement> | <loop_statement> 
+              | <control_statement> | <print_statement> | <return_statement> 
+              | <break_statement> | <comment>
+
+<assignment_statement> ::= <identifier> "=" <expression> <semicolon> | <comment>
+
+<loop_statement> ::= "do" "{" <method_body> "}" "while" "(" <condition> ")" <semicolon> | <comment>
+                   | "for" "(" <assignment_statement> <condition> <semicolon> <assignment_statement> ")" "{" <method_body> "}" | <comment>
+
+<control_statement> ::= "if" "(" <condition> ")" "{" <method_body> "}" <else_if_statement> <else_statement> | <comment>
+                      | "switch" "(" <expression> ")" "{" <case_statement> <default_statement> "}" | <comment>
+
+<else_if_statement> ::= "else if" "(" <condition> ")" "{" <method_body> "}" | ε | <comment>
+
+<else_statement> ::= "else" "{" <method_body> "}" | ε | <comment>
+
+<case_statement> ::= "case" <expression> ":" <method_body> | <case_statement> "case" <expression> ":" <method_body> | <comment>
+
+<default_statement> ::= "default" ":" <method_body> | ε | <comment>
+
+<print_statement> ::= "out.print" "(" <string_value> ["," <identifier>] ")" <semicolon> | <comment>
+
+<return_statement> ::= "return" [<expression>] <semicolon> | <comment>
+
+<break_statement> ::= "break" <semicolon> | <comment>
+
+<expression> ::= <term> | <expression> <arithmetical_operator> <term> | <comment>
+
+<term> ::= <factor> | <term> <arithmetical_operator> <factor> | <comment>
+
+<factor> ::= <identifier> | <literal> | "(" <expression> ")" | <method_call> | <object_creation> | <comment>
+
+<condition> ::= <expression> <comparison_operator> <expression> 
+              | <boolean_value> 
+              | <condition> <logical_operator> <condition> | <comment>
+
+<method_call> ::= <identifier> "." <identifier> "(" [<arguments>] ")" <semicolon> | <comment>
+
+<object_creation> ::= <class_name> <identifier> "=" "new" <class_name> "()" <semicolon> | <comment>
+
+<arguments> ::= <expression> | <arguments> "," <expression> | <comment>
+
+<modifier> ::= "public" | "private" | <comment>
+
+<return_type> ::= <var_type> | "void" | <comment>
+
+<var_type> ::= "int" | "char" | "double" | "boolean" | "String" | <comment>
+
+<identifier> ::= <letter> <tail> {<reserved_word>} | <comment>
+
+<tail> ::= <letter> | <digit> | "_" <tail> | ε | <comment>
+
+<reserved_word> ::= "int" | "char" | "double" | "boolean" | "String" | "class" 
+                  | "new" | "return" | "void" | "if" | "else" | "while" | "do" 
+                  | "for" | "switch" | "case" | "default" | "break" | "true" 
+                  | "false" | "public" | "private" | <comment>
+
+<literal> ::= <integer_literal> | <char_literal> | <double_literal> | <boolean_literal> | <string_literal> | <comment>
+
+<integer_literal> ::= <digit> | <digit> <integer_literal> | <comment>
+
+<char_literal> ::= "'" <character> "'" | <comment>
+
+<double_literal> ::= <digit> "." <digit> "d" | <comment>
+
+<boolean_literal> ::= "true" | "false" | <comment>
+
+<string_literal> ::= "\"" <string_content> "\"" | <comment>
+
+<string_content> ::= <character> | <string_content> <character> | <comment>
+
+<comparison_operator> ::= ">" | "<" | "==" | "!=" | <comment>
+
+<logical_operator> ::= "&&" | "||" | <comment>
+
+<arithmetical_operator> ::= "+" | "-" | "*" | "/" | <comment>
+
+<comment> ::= "//" <string_value> | "/*" <string_value> "*/"
+
+<class_name> ::= <capital_letter> <tail> | <comment>
+
+<capital_letter> ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" 
+                   | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" 
+                   | "W" | "X" | "Y" | "Z" | <comment>
+
+<letter> ::= <capital_letter> | <lower_letter> | <comment>
+
+<lower_letter> ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" 
+                 | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" 
+                 | "w" | "x" | "y" | "z" | <comment>
+
+<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | <comment>
+
+<string_value> ::= <string_content> | <comment>
+
+<character> ::= <letter> | <digit> | <special_character> | <comment>
+
+<special_character> ::= "\n" | "\t" | "\'" | "\"" | "\\" | ...
