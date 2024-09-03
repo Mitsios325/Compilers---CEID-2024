@@ -1,0 +1,62 @@
+#TODO class_list
+#TODO Μια μεταβλητή ή μια μέθοδος που είναι public είναι προσβάσιμη από αντικείμενα όλων
+# των classes. Μια μεταβλητή ή μια μέθοδος που είναι private είναι προσβάσιμη μόνο
+# από αντικείμενα της class που έχει οριστεί.
+
+<program> ::= <comment> <class_declaration> | <comment> <program> <class_declaration>
+<class> ::= <class_declaration> <comment>
+<comment> ::= "//" <string_value> | "/*" <string_value> "*/" | ε
+<class_declaration> ::= "public class" <class_name> "{" <comment> <pro_variable_declaration> <pro_method_declaration> <comment> "}"
+<class_name> ::= <capital_letter><tail>
+<pro_variable_declaration> ::= <comment> <variable_declaration> <comment> <pro_variable_declaration> | ε
+<pro_method_declaration> ::= <comment> <method> <comment> | ε
+<method> ::= <method_declaration> "{" <expressions> <return_type><var_name>"}" | <method_declaration> "{" <statement> "}"
+<variable_declaration> ::= <modifier> <var_type> <var_name><semilocolon> | <var_type> <var_name> <semilocolon>
+<method_declaration> ::= <modifier> <return_type> <var_name> "(" <parameters> ")"
+<method_call> ::= <var_name>"."<var_name>"("<variables>")" <semilocolon> | <var_name>"."<var_name> <semilocolon>
+<method_body> ::= <comment> <expressions> <comment> | <comment> <statement> <comment> | <comment> <expressions> <method_body> | <comment> <statement> <method_body>
+<loop_statement> ::= "do" "{" <method_body> "}" "while" "(" <condition> ")" <semilocolon>
+                   | "for" "(" <expressions> <semilocolon> <condition> <semicolon> <expressions> ")" "{" <method_body> "}"
+<control_statement> ::= "if" "(" <condition> ")" "{" <method_body> "}" <else_if_statement> <else_statement>
+                      | "switch" "(" <expression> ")" "{" <case_statement> <default_statement> "}"
+<else_if_statement> ::= "else if" "(" <condition> ")" "{" <method_body> "}" | ""
+<else_statement> ::= "else" "{" <method_body> "}" | ""
+<case_statement> ::= "case" <expression> ":" <method_body> | "case" <expression> ":" <method_body> <case_statement>
+<default_statement> ::= "default" ":" <method_body> | ""
+<print_statement> ::= "out.print" "(" <string_value> ["," <identifier>] ")" <semilocolon>
+<return_statement> ::= "return" [<expression>] <semilocolon>
+<break_statement> ::= "break" <semilocolon>
+<variables> ::= <var_name> | <var_name>","<variables>
+<expressions> ::= <comment> <variable_declaration> <comment> | <comment> <var_type> <set_val> <semilocolon> <comment> | <comment> <set_val> <semilocolon> <comment> | <comment> <set_val> <arethmetical_operation> <value> <semilocolon> <comment>
+<expression> ::= <factor> | <expression> <arethmetical_operation> <factor>
+<factor> ::= <var_name> | <int_value> | <char_value> | <double_value> | <boolean_value> | <string_value> | "(" <expression> ")" | <method_call> | <object_creation>
+<set_val> ::= <var_name> "=" <value>
+<arethmetical_operation> ::= "+" | "-" | "*" | "/"
+<object_creation> ::= <class> <var_name> "= new " <class>"()" <semilocolon>
+<parameters> ::= <var_type> <var_name><parameters>| ","<parameters> | ε 
+<return_type> ::= <var_type> | "void"
+<modifier> ::= "private" | "public"
+<var_type> ::= "int" | "char" | "double" | "boolean" | "String"
+<var_name> ::= <lower_letter><tail> | <capital_letter><tail> 
+<tail> ::= <lower_letter><tail> | <digit><tail> | <capital_letter><tail> | <underscore><tail> | ε
+<statement> ::= <comment> <expressions> <comment> | <comment> <loop_statement> <comment> | <comment> <control_statement> <comment> | <comment> <print_statement> <comment> | <comment> <return_statement> <comment> | <comment> <break_statement> <comment>
+<condition> ::= <expression> <relational_operator> <expression> | <condition> <logical_operator> <condition> | "(" <condition> ")"
+<relational_operator> ::= ">" | "<" | "==" | "!="
+<logical_operator> ::= "&&" | "||"
+<value> ::= <int_value> | <double_value> | <string_value> | <char_value> | <boolean_value>
+<int_value> ::= <var_name><semilocolon> | <digit> <int_value> | <semilocolon>
+<char_value> ::= <var_name><semilocolon> | "'" <capital_letter><char_value> "'" | '"' <lower_letter><char_value> '"' | <semilocolon>
+<double_value> ::= <var_name><semilocolon> | <digit> <double_value> | "." <double_value> | "d"<semilocolon>
+<string_value> ::= <var_name><semilocolon> | """ <string_value> """ | <capital_letter><string_value> | <lower_letter><string_value> | <digit><string_value> | <special_charcter><string_value>
+<boolean_value> ::= <var_name><semilocolon> | "True"<semilocolon> | "False" <semilocolon> 
+<capital_letter> ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z"
+<lower_letter> ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
+<digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+<special_character> ::= "!" | "\"" | "#" | "$" | "%" | "&" | "'" | "(" | ")" 
+                      | "*" | "+" | "," | "-" | "." | "/" | ":" | "<" 
+                      | "=" | ">" | "?" | "@" | "[" | "\\" | "]" | "^" | "_" 
+                      | "`" | "{" | "|" | "}" | "~"
+<underscore> ::= "_"
+<semilocolon> ::= ";"
+
+
