@@ -1,9 +1,5 @@
-#TODO class_list
-#TODO Μια μεταβλητή ή μια μέθοδος που είναι public είναι προσβάσιμη από αντικείμενα όλων
-# των classes. Μια μεταβλητή ή μια μέθοδος που είναι private είναι προσβάσιμη μόνο
-# από αντικείμενα της class που έχει οριστεί.
 
-<program> ::= <comment> <class_declaration> | <comment> <program> <class_declaration>
+<program> ::= <comment> <class> | <comment> <program> <class>
 <class> ::= <class_declaration> <comment>
 <comment> ::= "//" <string_value> | "/*" <string_value> "*/" | ε
 <class_declaration> ::= "public class" <class_name> "{" <comment> <pro_variable_declaration> <pro_method_declaration> <comment> "}"
