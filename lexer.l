@@ -71,29 +71,19 @@
 <COMMENT>[^(*\n]+                   { /* do nothing */ }
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
+/*----VARIABLES----*/
+[0-9]+                              { yylval.integer = atoi(yytext); return T_INTEGER; }
+[0-9]+\.[0-9]+d                     { yylval.double = strdup(yytext); yylval.double}
 
-"<LinearLayout>"        { return T_LINEAR_LAYOUT; }
-"<RelativeLayout>"      { return T_RELATIVE_LAYOUT; }
-"android:layout_width"  { return T_LAYOUT_WIDTH; }
-"android:layout_height" { return T_LAYOUT_HEIGHT; }
-"android:id"            { return T_ID; }
-"android:orientation"   { return T_ORIENTATION; }
-"android:text"          { return T_TEXT; }
-"android:textColor"     { return T_TEXT_COLOR; }
-"android:src"           { return T_SRC; }
-"android:padding"       { return T_PADDING; }
-"android:checkedButton" { return T_CHECKED_BUTTON; }
-"android:max"           { return T_MAX; }
-"android:progress"      { return T_PROGRESS; }
-"<TextView/>"           { return T_TEXT_VIEW; }
-"<ImageView/>"          { return T_IMAGE_VIEW; }
-"<Button/>"             { return T_BUTTON; }
-"<RadioGroup>"          { return T_RADIO_GROUP; }
-"<RadioButton/>"        { return T_RADIO_BUTTON; }
-"<ProgressBar/>"        { return T_PROGRESS_BAR; }
-"+"  					{ return T_PLUS_TOKEN; }
+/*string*/
+
+
+
+
+
+
 [0-9]+                  { yylval.integer = atoi(yytext); return T_INTEGER; }
-\"([^\\\"]|\\.)*\"      { yylval.string = strdup(yytext+1); yylval.string[yyleng-2] = '\0'; return T_STRING; }
+\"([^\\\"]|\\.)*\"      { yylval.string = strdup(yytext+1); yylval.string[yyleng-2] = '\0'; return T_STRING}; }
 [ \t\n]+                ; // Ignore whitespace and newlines
 .                       ; // Ignore unrecognized characters
 %%
