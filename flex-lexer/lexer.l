@@ -39,7 +39,7 @@ int temp_str_len;
 "new"                   {return T_NEW;}
 "true"                  {return T_TRUE;}
 "false"                 {return T_FALSE;}
-"out"                   {return T_OUT;}
+"out.print"             {return T_OUT;}
 
 /*---------SYMBOLS---------*/
 
