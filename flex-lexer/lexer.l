@@ -83,20 +83,22 @@ int temp_str_len;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
 /*----VARIABLES----*/
-[0-9]+                              { yylval.integer = atoi(yytext); return T_INTEGER; }
-[0-9]+\.[0-9]+d                     { yylval.double = strdup(yytext); yylval.double}
+[0-9]+                              { printf("Integer: %d\n",atoi(yytext)); }
+[0-9]+\.[0-9]+d                     { temp_str_len=strlen(yytext);
+                                      temp_str=(char *)malloc((temp_str_len-1)*sizeof(char)); 
+                                      strncopy(temp_str,yytext,(temp_str_len-1));
+                                      printf("Double: %f\n",atof(temp_str));
+                                    }
+\"([^\\\"]|\\.)*\"                  { temp_str_len=strlen(yytext);
+                                      temp_str=(char *)malloc((temp_str_len-2)*sizeof(char)); 
+                                      strncopy(temp_str,yytext+1,(temp_str_len-2)); 
+                                      printf("String %s",temp_str);
+                                    }
 
-/*string*/
 
+[ \t\n]+    ;
+.           ;
 
-
-
-
-
-[0-9]+                  { yylval.integer = atoi(yytext); return T_INTEGER; }
-\"([^\\\"]|\\.)*\"      { yylval.string = strdup(yytext+1); yylval.string[yyleng-2] = '\0'; return T_STRING}; }
-[ \t\n]+                ; // Ignore whitespace and newlines
-.                       ; // Ignore unrecognized characters
 %%
 
 int yywrap() {
