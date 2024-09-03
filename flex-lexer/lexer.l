@@ -1,6 +1,16 @@
 %{
 #include "y.tab.h" // Bison-generated header file
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+char *temp_str;
+int temp_str_len;
 %}
+
+%option noyywrap
+
+%s COMMENT
 
 %%
 
@@ -67,8 +77,9 @@
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); } /*should there be a sequence for closing comment without opening OR just let is appear as a syntax error by bison?*/
 <COMMENT>\n                         { yycolumn = 1; /* yylineno++; */ }
-<COMMENT>[(|*]                      { /* do nothing */ }
-<COMMENT>[^(*\n]+                   { /* do nothing */ }
+<COMMENT>[(|*]                      ;
+<COMMENT>[^(*\n]+                   ;
+<COMMENT>.                          ;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
 /*----VARIABLES----*/
