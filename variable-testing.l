@@ -24,9 +24,11 @@ int yylex(void);
                                     }
 \"([^\\\"]|\\.)*\"                  { temp_str_len=strlen(yytext);
                                       temp_str=(char *)malloc((temp_str_len-2)*sizeof(char)); 
-                                      strncopy(temp_str,yytext+1,(temp_str_len-2)); }
+                                      strncopy(temp_str,yytext+1,(temp_str_len-2)); 
+                                      printf("String %s",temp_str);
+                                    }
 
-\" "        ;
+
 [ \t\n]+    ;
 .           ;
 
