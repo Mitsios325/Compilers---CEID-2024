@@ -4,16 +4,22 @@
 #include <string.h>
 #include <stdlib.h>
 
-int yycolumn=0;
+extern YYSTYPE yylval;
+
+extern int yylinecount;
+
 char *temp_str;
 int temp_str_len;
 %}
 
-%option noyywrap
 
 %s COMMENT
 
 %%
+
+/*-----END OF FILE-----*/
+
+<<EOF>>                 { return 0; }
 
 /*-------BOUND WORDS-------*/
 
@@ -46,6 +52,8 @@ int temp_str_len;
 
 "{"                     {return T_BRACKET_OPEN;}
 "}"                     {return T_BRACKET_CLOSE;}
+"("                     {return T_LPAREN;}
+")"                     {return T_LPAREN;}
 "+"                     {return T_PLUS;}
 "-"                     {return T_MINUS;}
 "*"                     {return T_MULT;}
@@ -73,32 +81,33 @@ int temp_str_len;
 
 
 /*-----COMMENTS-----*/
-"//".*\n                            { yycolumn++ }
+"//".*\n                            { yylinecount++ }
 
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); } /*should there be a sequence for closing comment without opening OR just let is appear as a syntax error by bison?*/
-<COMMENT>\n                         { yycolumn++; }
+<COMMENT>\n                         { yylinecount++; }
 <COMMENT>.                          ;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
 /*----VARIABLES----*/
-
-[0-9]+                              { printf("Integer: %d\n",atoi(yytext)); }
-[0-9]+\.[0-9]+d                     { temp_str_len=strlen(yytext);
-                                      temp_str=(char *)malloc((temp_str_len-1)*sizeof(char)); 
-                                      strncopy(temp_str,yytext,(temp_str_len-1));
-                                      printf("Double: %f\n",atof(temp_str));
+[a-zA-Z][a-zA-Z0-9_]*               { yylval.sval=strdup(yytext); return T_IDENTIFIER; }
+[A-Z][a-zA-Z0-9_]*                  { yylval.sval=strdup(yytext); return T_CIDENTIFIER; }
+[0-9]+                              { yylval.ival=atoi(yytext); return T_INT; }
+[0-9]+\.[0-9]+d                     { temp_str=strdup(yytext);
+                                      strncopy(temp_str,temp_str,(strlen(temp_str)-1));
+                                      yylval.fval=atof(temp_str);
+                                      return T_DOUBLE;
                                     }
-\"([^\\\"]|\\.)*\"                  { temp_str_len=strlen(yytext);
-                                      temp_str=(char *)malloc((temp_str_len-2)*sizeof(char)); 
-                                      strncopy(temp_str,yytext+1,(temp_str_len-2)); 
-                                      printf("String %s",temp_str); 
+\"([^\\\"]|\\.)*\"                  { temp_str=strdup(yytext); 
+                                      strncopy(temp_str,temp_str+1,(strlen(temp_str)-2)); 
+                                      yylval.sval=strdup(temp_str);
+                                      return T_STRING;
                                     }
 
-[a-zA-Z][a-zA-Z0-9_]* {}
 
-[ \t\n]+    ;
-.           ;
+[ \t]+                              ;
+[\n\r]                              {yylinecount++;}
+.                                   ;
 
 %%
 
