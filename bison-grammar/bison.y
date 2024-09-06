@@ -31,29 +31,24 @@ program
 
 class
     : class_declaration 
-    | class_declaration nested_class
-    ;
-nested_class
-    : T_PUBLIC T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration T_BRACKET_CLOSE
-    | T_PRIVATE T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration T_BRACKET_CLOSE
+    | class class_declaration
     ;
 
 class_declaration
     : T_PUBLIC T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration T_BRACKET_CLOSE
-    | T_PRIVATE T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration T_BRACKET_CLOSE
     ;
 
 class_name
-    : T_IDENTIFIER
+    : T_CIDENTIFIER
     ;
 
 pro_variable_declaration
-    : variable_declaration pro_variable_declaration
+    : pro_variable_declaration variable_declaration 
     | /* empty */
     ;
 
 pro_method_declaration
-    : method 
+    : pro_method_declaration method 
     | /* empty */
     ;
 

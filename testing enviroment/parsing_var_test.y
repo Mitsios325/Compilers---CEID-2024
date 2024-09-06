@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     {
         yyparse();
     }
-    printf("\n\n-------PROGRAM EXITTED SUCCESSFULLY------\n\n");
+    printf("\n\n-------PROGRAM EXITED SUCCESSFULLY------\n\n");
     return 0;   
 }
 
