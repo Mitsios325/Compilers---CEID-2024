@@ -1,16 +1,15 @@
 
-<program> ::= <comment> <class> | <comment> <program> <class>
-<class> ::= <class_declaration> <comment>
-<comment> ::= "//" <string_value> | "/*" <string_value> "*/" | ε
-<class_declaration> ::= "public class" <class_name> "{" <comment> <pro_variable_declaration> <pro_method_declaration> <comment> "}"
+<program> ::= <class> | <program> <class>
+<class> ::= <class_declaration> 
+<class_declaration> ::= "public class" <class_name> "{" <pro_variable_declaration> <pro_method_declaration>"}"
 <class_name> ::= <capital_letter><tail>
-<pro_variable_declaration> ::= <comment> <variable_declaration> <comment> <pro_variable_declaration> | ε
-<pro_method_declaration> ::= <comment> <method> <comment> | ε
+<pro_variable_declaration> ::= <variable_declaration> <pro_variable_declaration> | ε
+<pro_method_declaration> ::= <method> | ε
 <method> ::= <method_declaration> "{" <expressions> <return_type><var_name>"}" | <method_declaration> "{" <statement> "}"
 <variable_declaration> ::= <modifier> <var_type> <var_name><semilocolon> | <var_type> <var_name> <semilocolon>
 <method_declaration> ::= <modifier> <return_type> <var_name> "(" <parameters> ")"
 <method_call> ::= <var_name>"."<var_name>"("<variables>")" <semilocolon> | <var_name>"."<var_name> <semilocolon>
-<method_body> ::= <comment> <expressions> <comment> | <comment> <statement> <comment> | <comment> <expressions> <method_body> | <comment> <statement> <method_body>
+<method_body> ::= <expressions>  | <statement>  | <expressions> <method_body> | <statement> <method_body>
 <loop_statement> ::= "do" "{" <method_body> "}" "while" "(" <condition> ")" <semilocolon>
                    | "for" "(" <expressions> <semilocolon> <condition> <semicolon> <expressions> ")" "{" <method_body> "}"
 <control_statement> ::= "if" "(" <condition> ")" "{" <method_body> "}" <else_if_statement> <else_statement>
@@ -23,7 +22,7 @@
 <return_statement> ::= "return" [<expression>] <semilocolon>
 <break_statement> ::= "break" <semilocolon>
 <variables> ::= <var_name> | <var_name>","<variables>
-<expressions> ::= <comment> <variable_declaration> <comment> | <comment> <var_type> <set_val> <semilocolon> <comment> | <comment> <set_val> <semilocolon> <comment> | <comment> <set_val> <arethmetical_operation> <value> <semilocolon> <comment>
+<expressions> ::= <variable_declaration> | <var_type> <set_val> <semilocolon>| <set_val> <semilocolon> |<set_val> <arethmetical_operation> <value> <semilocolon>
 <expression> ::= <factor> | <expression> <arethmetical_operation> <factor>
 <factor> ::= <var_name> | <int_value> | <char_value> | <double_value> | <boolean_value> | <string_value> | "(" <expression> ")" | <method_call> | <object_creation>
 <set_val> ::= <var_name> "=" <value>
@@ -35,7 +34,7 @@
 <var_type> ::= "int" | "char" | "double" | "boolean" | "String"
 <var_name> ::= <lower_letter><tail> | <capital_letter><tail> 
 <tail> ::= <lower_letter><tail> | <digit><tail> | <capital_letter><tail> | <underscore><tail> | ε
-<statement> ::= <comment> <expressions> <comment> | <comment> <loop_statement> <comment> | <comment> <control_statement> <comment> | <comment> <print_statement> <comment> | <comment> <return_statement> <comment> | <comment> <break_statement> <comment>
+<statement> ::= <expressions> |<loop_statement> | <control_statement> |  <print_statement> |<return_statement>|<break_statement> 
 <condition> ::= <expression> <relational_operator> <expression> | <condition> <logical_operator> <condition> | "(" <condition> ")"
 <relational_operator> ::= ">" | "<" | "==" | "!="
 <logical_operator> ::= "&&" | "||"
