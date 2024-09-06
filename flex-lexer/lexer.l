@@ -82,6 +82,7 @@ int temp_str_len;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
 /*----VARIABLES----*/
+
 [0-9]+                              { printf("Integer: %d\n",atoi(yytext)); }
 [0-9]+\.[0-9]+d                     { temp_str_len=strlen(yytext);
                                       temp_str=(char *)malloc((temp_str_len-1)*sizeof(char)); 
@@ -94,6 +95,7 @@ int temp_str_len;
                                       printf("String %s",temp_str); 
                                     }
 
+[a-zA-Z][a-zA-Z0-9_]* {}
 
 [ \t\n]+    ;
 .           ;

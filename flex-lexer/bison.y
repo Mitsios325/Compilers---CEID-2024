@@ -7,24 +7,17 @@
 extern int yylex();
 extern int yyparse();
 extern FILE *yyin;
+
 void yyerror(const char* s){
   syslog(LOG_ERR, "Syntax error: %s\n", s);
 }
 %}
 
-/* Declare tokens from the lexer */
-%token T_PUBLIC T_CLASS T_INT T_CHAR T_DOUBLE T_BOOL T_STRING T_VOID T_IF T_ELSE T_ELSE_IF T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT T_TRUE T_FALSE
-%token T_ASSIGN T_OP_EQ T_OP_NE T_OP_LT T_OP_GT T_OP_AND T_OP_OR T_PLUS T_MINUS T_MULT T_DIV
-%token T_LPAREN T_RPAREN T_LBRACE T_RBRACE T_SEMICOLON T_COMMA T_DOT
-%token T_IDENTIFIER T_INT_LITERAL T_DOUBLE_LITERAL T_CHAR_LITERAL T_STRING_LITERAL
+%token T_PUBLIC T_PRIVATE T_CLASS T_INT T_CHAR T_DOUBLE T_BOOLEAN T_STRING T_VOID T_IF T_ELSE T_ELSE_IF T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT T_TRUE T_FALSE
+%token T_ASSIGNMENT T_OP_EQ T_OP_NE T_OP_LT T_OP_GT T_OP_LTE T_OP_GTE T_OP_AND T_OP_OR T_PLUS T_MINUS T_MULT T_DIV
+%token T_BRACKET_OPEN T_BRACKET_CLOSE T_SEMICOLON T_COMMA T_DOT T_COLON T_S_QUOTE T_QUOTE
+%token T_IDENTIFIER T_INTEGER T_DOUBLE_LITERAL T_CHAR_LITERAL T_STRING T_LPAREN T_RPAREN
 
-/* Define operator precedence and associativity if needed */
-%token T_OR T_AND
-%token T_EQUAL T_NOT_EQUAL T_LESS T_GREATER
-%token T_PLUS T_MINUS
-%token T_MULT T_DIV
-
-/* Non-terminal symbols */
 %start program
 
 %%
@@ -32,22 +25,16 @@ void yyerror(const char* s){
 /* Production rules based on the BNF */
 
 program
-    : comment class
-    | comment program class
+    :  class 
+    |  program class 
     ;
 
 class
-    : class_declaration comment
-    ;
-
-comment
-    : "//" T_STRING_LITERAL
-    | "/*" T_STRING_LITERAL "*/"
-    | /* empty */
+    : class_declaration 
     ;
 
 class_declaration
-    : T_PUBLIC T_CLASS class_name T_LBRACE comment pro_variable_declaration pro_method_declaration comment T_RBRACE
+    : T_PUBLIC T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration comment T_BRACKET_CLOSE
     ;
 
 class_name
@@ -55,18 +42,18 @@ class_name
     ;
 
 pro_variable_declaration
-    : comment variable_declaration comment pro_variable_declaration
+    : variable_declaration pro_variable_declaration
     | /* empty */
     ;
 
 pro_method_declaration
-    : comment method comment
+    : method 
     | /* empty */
     ;
 
 method
-    : method_declaration T_LBRACE expressions return_statement T_RBRACE
-    | method_declaration T_LBRACE statement T_RBRACE
+    : method_declaration T_BRACKET_OPEN expressions return_statement T_BRACKET_CLOSE
+    | method_declaration T_BRACKET_OPEN statement T_BRACKET_CLOSE
     ;
 
 variable_declaration
@@ -84,29 +71,29 @@ method_call
     ;
 
 method_body
-    : comment expressions comment
-    | comment statement comment
-    | comment expressions method_body
-    | comment statement method_body
+    : expressions 
+    | statement 
+    | expressions method_body
+    | statement method_body
     ;
 
 loop_statement
-    : T_DO T_LBRACE method_body T_RBRACE T_WHILE T_LPAREN condition T_RPAREN T_SEMICOLON
-    | T_FOR T_LPAREN expressions T_SEMICOLON condition T_SEMICOLON expressions T_RPAREN T_LBRACE method_body T_RBRACE
+    : T_DO T_BRACKET_OPEN method_body T_BRACKET_CLOSE T_WHILE T_LPAREN condition T_RPAREN T_SEMICOLON
+    | T_FOR T_LPAREN expressions T_SEMICOLON condition T_SEMICOLON expressions T_RPAREN T_BRACKET_OPEN method_body T_BRACKET_CLOSE
     ;
 
 control_statement
-    : T_IF T_LPAREN condition T_RPAREN T_LBRACE method_body T_RBRACE else_if_statement else_statement
-    | T_SWITCH T_LPAREN expression T_RPAREN T_LBRACE case_statement default_statement T_RBRACE
+    : T_IF T_LPAREN condition T_RPAREN T_BRACKET_OPEN method_body T_BRACKET_CLOSE else_if_statement else_statement
+    | T_SWITCH T_LPAREN expression T_RPAREN T_BRACKET_OPEN case_statement default_statement T_BRACKET_CLOSE
     ;
 
 else_if_statement
-    : T_ELSE_IF T_LPAREN condition T_RPAREN T_LBRACE method_body T_RBRACE
+    : T_ELSE_IF T_LPAREN condition T_RPAREN T_BRACKET_OPEN method_body T_BRACKET_CLOSE
     | /* empty */
     ;
 
 else_statement
-    : T_ELSE T_LBRACE method_body T_RBRACE
+    : T_ELSE T_BRACKET_OPEN method_body T_BRACKET_CLOSE
     | /* empty */
     ;
 
@@ -121,8 +108,8 @@ default_statement
     ;
 
 print_statement
-    : T_PRINT T_LPAREN T_STRING_LITERAL T_COMMA T_IDENTIFIER T_RPAREN T_SEMICOLON
-    | T_PRINT T_LPAREN T_STRING_LITERAL T_RPAREN T_SEMICOLON
+    : T_OUT T_LPAREN T_STRING T_COMMA T_IDENTIFIER T_RPAREN T_SEMICOLON
+    | T_OUT T_LPAREN T_STRING T_RPAREN T_SEMICOLON
     ;
 
 return_statement
@@ -140,10 +127,10 @@ variables
     ;
 
 expressions
-    : comment variable_declaration comment
-    | comment var_type set_val T_SEMICOLON comment
-    | comment set_val T_SEMICOLON comment
-    | comment set_val arethmetical_operation value T_SEMICOLON comment
+    : variable_declaration 
+    | var_type set_val T_SEMICOLON 
+    | set_val T_SEMICOLON 
+    | set_val arethmetical_operation value T_SEMICOLON 
     ;
 
 expression
@@ -153,29 +140,29 @@ expression
 
 factor
     : T_IDENTIFIER
-    | T_INT_LITERAL
+    | T_INTEGER
     | T_CHAR_LITERAL
     | T_DOUBLE_LITERAL
-    | T_BOOLEAN_LITERAL
-    | T_STRING_LITERAL
+    | T_STRING
     | T_LPAREN expression T_RPAREN
     | method_call
     | object_creation
     ;
 
 set_val
-    : T_IDENTIFIER T_ASSIGN value
+    : T_IDENTIFIER T_ASSIGNMENT value
     ;
 
 arethmetical_operation
     : T_PLUS
     | T_MINUS
-    | T_MULTIPLY
-    | T_DIVIDE
+    | T_MULT
+    | T_DIV
+    | T_ASSIGNMENT
     ;
 
 object_creation
-    : class T_IDENTIFIER T_ASSIGN T_NEW class T_LPAREN T_RPAREN T_SEMICOLON
+    : T_IDENTIFIER T_ASSIGNMENT T_NEW T_IDENTIFIER T_LPAREN T_RPAREN T_SEMICOLON
     ;
 
 parameters
@@ -203,12 +190,12 @@ var_type
     ;
 
 statement
-    : comment expressions comment
-    | comment loop_statement comment
-    | comment control_statement comment
-    | comment print_statement comment
-    | comment return_statement comment
-    | comment break_statement comment
+    :  expressions 
+    |  loop_statement 
+    |  control_statement 
+    |  print_statement 
+    |  return_statement 
+    |  break_statement 
     ;
 
 condition
@@ -218,23 +205,26 @@ condition
     ;
 
 relational_operator
-    : T_GREATER
-    | T_LESS
-    | T_EQUAL
-    | T_NOT_EQUAL
+    : T_OP_GT
+    | T_OP_LT
+    | T_OP_EQ
+    | T_OP_NE
+    | T_OP_GTE
+    | T_OP_LTE
     ;
 
 logical_operator
-    : T_AND
-    | T_OR
+    : T_OP_AND
+    | T_OP_OR
     ;
 
 value
-    : T_INT_LITERAL
+    : T_INTEGER
     | T_DOUBLE_LITERAL
-    | T_STRING_LITERAL
+    | T_STRING
     | T_CHAR_LITERAL
-    | T_BOOLEAN_LITERAL
+    | T_TRUE
+    | T_FALSE
     ;
 
 %%
