@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+int yycolumn=0;
 char *temp_str;
 int temp_str_len;
 %}
@@ -72,13 +73,11 @@ int temp_str_len;
 
 
 /*-----COMMENTS-----*/
-"//".*\n                            { yycolumn = 1; /* yylineno++; */ }
+"//".*\n                            { yycolumn++ }
 
 "/*"                                { BEGIN(COMMENT); }
 <COMMENT>"*/"                       { BEGIN(INITIAL); } /*should there be a sequence for closing comment without opening OR just let is appear as a syntax error by bison?*/
-<COMMENT>\n                         { yycolumn = 1; /* yylineno++; */ }
-<COMMENT>[(|*]                      ;
-<COMMENT>[^(*\n]+                   ;
+<COMMENT>\n                         { yycolumn++; }
 <COMMENT>.                          ;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
@@ -92,7 +91,7 @@ int temp_str_len;
 \"([^\\\"]|\\.)*\"                  { temp_str_len=strlen(yytext);
                                       temp_str=(char *)malloc((temp_str_len-2)*sizeof(char)); 
                                       strncopy(temp_str,yytext+1,(temp_str_len-2)); 
-                                      printf("String %s",temp_str);
+                                      printf("String %s",temp_str); 
                                     }
 
 

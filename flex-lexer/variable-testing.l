@@ -18,14 +18,17 @@ int yylex(void);
 
 [0-9]+                              { printf("Integer: %d\n",atoi(yytext)); }
 [0-9]+\.[0-9]+d                     { temp_str_len=strlen(yytext);
-                                      temp_str=(char *)malloc((temp_str_len-1)*sizeof(char)); 
-                                      strncopy(temp_str,yytext,(temp_str_len-1));
+                                      temp_str=(char *)realloc(temp_str,(temp_str_len-1)*sizeof(char)); 
+                                      strncpy(temp_str,yytext,(temp_str_len-1));
                                       printf("Double: %f\n",atof(temp_str));
                                     }
+
+
+
 \"([^\\\"]|\\.)*\"                  { temp_str_len=strlen(yytext);
-                                      temp_str=(char *)malloc((temp_str_len-2)*sizeof(char)); 
-                                      strncopy(temp_str,yytext+1,(temp_str_len-2)); 
-                                      printf("String %s",temp_str);
+                                      temp_str=(char *)realloc(temp_str,(temp_str_len-1)*sizeof(char)); 
+                                      strncpy(temp_str,yytext+1,(temp_str_len-2)); 
+                                      printf("String: %s\n",temp_str);
                                     }
 
 
@@ -35,6 +38,8 @@ int yylex(void);
 %%
 
 int main(void) {
+    temp_str=(char *)malloc(1*sizeof(char));
+    temp_str[0]=NULL;
     /* Continuously call yylex() to process input until terminated by Ctrl+C */
     while (1) {
         yylex();
