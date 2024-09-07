@@ -92,16 +92,16 @@ int temp_str_len;
 /*----VARIABLES----*/
 [a-zA-Z][a-zA-Z0-9_]*               { yylval.sval=strdup(yytext); return T_IDENTIFIER; }
 [A-Z][a-zA-Z0-9_]*                  { yylval.sval=strdup(yytext); return T_CIDENTIFIER; }
-[0-9]+                              { yylval.ival=atoi(yytext); return T_INT; }
+[0-9]+                              { yylval.ival=atoi(yytext); return T_INT_V; }
 [0-9]+\.[0-9]+d                     { temp_str=strdup(yytext);
                                       strncopy(temp_str,temp_str,(strlen(temp_str)-1));
                                       yylval.fval=atof(temp_str);
-                                      return T_DOUBLE;
+                                      return T_DOUBLE_V;
                                     }
 \"([^\\\"]|\\.)*\"                  { temp_str=strdup(yytext); 
                                       strncopy(temp_str,temp_str+1,(strlen(temp_str)-2)); 
                                       yylval.sval=strdup(temp_str);
-                                      return T_STRING;
+                                      return T_STRING_V;
                                     }
 
 

@@ -1,7 +1,7 @@
 
 <program> ::= <class> | <program> <class>
 <class> ::= <class_declaration> | <class> <class_declaration>
-<class_declaration> ::= "public class" <class_name> "{" <pro_variable_declaration> <pro_method_declaration>"}"
+<class_declaration> ::= "public class" <class_name> "{" <pro_variable_declaration> <pro_method_declaration> <class> "}" | ε
 <class_name> ::= <capital_letter><tail>
 <pro_variable_declaration> ::= <pro_variable_declaration> <variable_declaration> | ε
 <pro_method_declaration> ::= <pro_method_declaration> <method> | ε
