@@ -69,6 +69,10 @@ method
     | method_declaration T_BRACKET_OPEN expressions T_BRACKET_CLOSE
     ;
 
+method_declaration
+    : modifier return_type T_IDENTIFIER T_LPAREN parameters T_RPAREN
+    ;
+
 variable_declaration
     : modifier var_type T_IDENTIFIER T_SEMICOLON
     | var_type T_IDENTIFIER T_SEMICOLON
@@ -87,6 +91,12 @@ expressions
     | var_type set_val T_SEMICOLON
     | set_val T_SEMICOLON
     | set_val arethmetical_operation value T_SEMICOLON
+    ;
+
+parameters
+    : var_type T_IDENTIFIER parameters
+    | T_COMMA parameters
+    | /* empty */
     ;
 
 set_val
