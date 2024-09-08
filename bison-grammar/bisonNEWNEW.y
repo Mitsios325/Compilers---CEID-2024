@@ -18,9 +18,9 @@ void yyerror(const char* s){
 %union {
     int ival;
     float fval;
-    bool bval;
     char *sval;
     char cval;
+    bool bval;
 }  
 
 %token T_PUBLIC T_PRIVATE T_CLASS T_CHAR T_DOUBLE T_BOOL T_VOID T_IF T_ELSE T_ELSE_IF T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT
@@ -126,8 +126,8 @@ value
     : T_IDENTIFIER 
     | T_INT_V
     | T_DOUBLE_V
-    | T_STRING_V
-    | T_CHAR_V
-    | T_TRUE
-    | T_FALSE
+    | T_STRING_V { }
+    | T_CHAR_V 
+    | T_TRUE { $$=$1 }
+    | T_FALSE { $$=$1 }
     ;
