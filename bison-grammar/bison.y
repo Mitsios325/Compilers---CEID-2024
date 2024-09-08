@@ -38,8 +38,8 @@ void yyerror(const char* s){
 /* Production rules based on the BNF */
 
 program
-    :  class 
-    |  program class 
+    :  program class 
+    |   /* empty */
     ;
 
 class
