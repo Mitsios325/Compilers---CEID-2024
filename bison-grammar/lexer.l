@@ -8,6 +8,28 @@ extern YYSTYPE yylval;
 
 extern int yylinecount;
 
+char convert_to_char(const char* yytext) {
+    // Check if it's an escape sequence (starts with a backslash)
+    if (yytext[1] == '\\') {
+        switch (yytext[2]) {
+            case 'a': return '\a';  // Bell
+            case 'b': return '\b';  // Backspace
+            case 'f': return '\f';  // Formfeed
+            case 'n': return '\n';  // Newline
+            case 'r': return '\r';  // Carriage return
+            case 't': return '\t';  // Tab
+            case 'v': return '\v';  // Vertical tab
+            case '\\': return '\\'; // Backslash
+            case '\'': return '\''; // Single quote
+            case '\"': return '\"'; // Double quote
+            case '?': return '\?';  // Question mark
+            default: return yytext[2]; // If it's not a known escape, return the second char
+        }
+    }
+    // If it's a single regular character, just return it
+    return yytext[1];
+}
+
 char *temp_str;
 int temp_str_len;
 %}
@@ -91,6 +113,9 @@ int temp_str_len;
                                       strncopy(temp_str,temp_str+1,(strlen(temp_str)-2)); 
                                       yylval.sval=strdup(temp_str);
                                       return T_STRING_V;
+                                    }
+\'(\\[abfnrtv\\\'\"?]|\n|.)\'       { yylval.cval=convert_to_char(yytext);
+                                     return T_CHAR_V;                                 
                                     }
 
 

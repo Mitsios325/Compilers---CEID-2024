@@ -20,6 +20,7 @@ void yyerror(const char* s){
     float fval;
     bool bval;
     char *sval;
+    char cval;
 }  
 
 %token T_PUBLIC T_PRIVATE T_CLASS T_CHAR T_DOUBLE T_BOOLEAN T_VOID T_IF T_ELSE T_ELSE_IF T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT
@@ -33,6 +34,7 @@ void yyerror(const char* s){
 %token <fval> T_DOUBLE_V
 %token <bval> T_TRUE
 %token <bval> T_FALSE
+%token <cval> T_CHAR_V
 
 
 %start program
