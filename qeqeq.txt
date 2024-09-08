@@ -1,0 +1,5 @@
+public class Giorkos {
+ int x;
+ x=5;
+ out.print(x)
+}

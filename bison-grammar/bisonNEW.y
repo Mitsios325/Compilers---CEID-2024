@@ -4,10 +4,16 @@
 #include <string.h>
 #include <syslog.h>
 
-extern int yylex();
+void yyerror(const char *s);
+int yylex();
 extern int yyparse();
-extern int yylinecount;
 extern FILE *yyin;
+extern int yylinecount;
+
+void yyerror(const char* s){
+  syslog(LOG_ERR, "Syntax error: %s\n", s);
+}
+%}
 
 %union {
     int ival;
@@ -15,12 +21,11 @@ extern FILE *yyin;
     char *sval;
 }   
 
-void yyerror(const char* s){
-  syslog(LOG_ERR, "Syntax error: %s\n", s);
-}
-%}
 
-%token T_PUBLIC T_PRIVATE T_CLASS T_CHAR T_DOUBLE T_BOOLEAN T_VOID T_IF T_ELSE T_ELSE_IF T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT T_TRUE T_FALSE
+
+%token T_PUBLIC T_PRIVATE T_CLASS T_CHAR T_STRING T_DOUBLE T_BOOLEAN T_VOID T_IF 
+%left T_ELSE T_ELSE_IF
+%token T_FOR T_WHILE T_DO T_RETURN T_BREAK T_SWITCH T_CASE T_DEFAULT T_NEW T_OUT T_TRUE T_FALSE
 %token T_ASSIGNMENT T_OP_EQ T_OP_NE T_OP_LT T_OP_GT T_OP_LTE T_OP_GTE T_OP_AND T_OP_OR T_PLUS T_MINUS T_MULT T_DIV
 %token T_BRACKET_OPEN T_BRACKET_CLOSE T_SEMICOLON T_COMMA T_DOT T_COLON T_S_QUOTE T_QUOTE
 %token T_INT T_LPAREN T_RPAREN
@@ -30,6 +35,7 @@ void yyerror(const char* s){
 %token <ival> T_INT_V
 %token <fval> T_DOUBLE_V
 
+%type <sval> class_name
 
 %start program
 
@@ -48,7 +54,7 @@ class
     ;
 
 class_declaration
-    : T_PUBLIC T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration class_declaration T_BRACKET_CLOSE
+    : T_PUBLIC T_CLASS class_name T_BRACKET_OPEN pro_variable_declaration pro_method_declaration class_declaration T_BRACKET_CLOSE 
     | /* empty */
     ;
 
@@ -123,8 +129,8 @@ default_statement
     ;
 
 print_statement
-    : T_OUT T_LPAREN T_STRING T_COMMA T_IDENTIFIER T_RPAREN T_SEMICOLON
-    | T_OUT T_LPAREN T_STRING T_RPAREN T_SEMICOLON
+    : T_OUT T_LPAREN T_STRING_V T_COMMA T_IDENTIFIER T_RPAREN T_SEMICOLON
+    | T_OUT T_LPAREN T_STRING_V T_RPAREN T_SEMICOLON
     ;
 
 return_statement
@@ -155,9 +161,9 @@ expression
 
 factor
     : T_IDENTIFIER
-    | T_INTEGER
-    | T_CHAR_LITERAL
-    | T_DOUBLE_LITERAL
+    | T_INT_V
+    | T_CHAR
+    | T_DOUBLE
     | T_STRING
     | T_LPAREN expression T_RPAREN
     | method_call
@@ -234,10 +240,10 @@ logical_operator
     ;
 
 value
-    : T_INTEGER
-    | T_DOUBLE_LITERAL
+    : T_INT
+    | T_DOUBLE_V
     | T_STRING
-    | T_CHAR_LITERAL
+    | T_CHAR
     | T_TRUE
     | T_FALSE
     ;
