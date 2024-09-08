@@ -237,6 +237,14 @@ void yyerror(const char *s) {
 }
 
 int main(int argc, char **argv) {
+    if (argc > 1) {
+        FILE *file = fopen(argv[1], "r");
+        if (!file) {
+            perror(argv[1]);
+            return 1;
+        }
+        yyin = file;  // yyin is the input file for the lexer
+    }
     yyparse();
     return 0;
 }
