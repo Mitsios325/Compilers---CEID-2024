@@ -60,8 +60,8 @@ int temp_str_len;
 "return"                {return T_RETURN;}
 "break"                 {return T_BREAK;}
 "new"                   {return T_NEW;}
-"true"                  {yylval.bval=1; return T_TRUE;}
-"false"                 {yylval.bval=0;return T_FALSE;}
+"true"                  {yylval.bval=TRUE; return T_TRUE;}
+"false"                 {yylval.bval=FALSE;return T_FALSE;}
 "out.print"             {return T_OUT;}
 
 
