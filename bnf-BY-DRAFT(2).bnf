@@ -1,6 +1,13 @@
+<<<<<<< Updated upstream
 <program> ::= <program> <class> | ε
 <class> ::=  <class> <class_declaration> | ε
 <class_declaration> ::= "public class" <class_name> "{" <pro_variable_declaration> <pro_method_declaration> <class> "}"
+=======
+
+<program> ::= <class> <program> |ε 
+<class> ::= <class> <class_declaration> | ε
+<class_declaration> ::= "public class" <class_name> "{" <pro_variable_declaration> <pro_method_declaration> <class> "}" | ε
+>>>>>>> Stashed changes
 <class_name> ::= <capital_letter><tail>
 <pro_variable_declaration> ::= <pro_variable_declaration> <variable_declaration> | ε
 <pro_method_declaration> ::= <pro_method_declaration> <method> | ε
