@@ -1,5 +1,5 @@
 %{
-#include "bisonNEW.tab.h" // Bison-generated header file
+#include "bisonNEWNEW.tab.h" // Bison-generated header file
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -101,8 +101,9 @@ int temp_str_len;
 <COMMENT>.                          ;
 <COMMENT><<EOF>>                    { fprintf(stderr, "Unfinished comment at EOF\n"); exit(1); }
 
-[a-zA-Z][a-zA-Z0-9_]*               { yylval.sval=strdup(yytext); return T_IDENTIFIER; }
+
 [A-Z][a-zA-Z0-9_]*                  { yylval.sval=strdup(yytext); return T_CIDENTIFIER; }
+[a-zA-Z][a-zA-Z0-9_]*               { yylval.sval=strdup(yytext); return T_IDENTIFIER; }
 [0-9]+                              { yylval.ival=atoi(yytext); return T_INT_V; }
 [0-9]+\.[0-9]+d                     { temp_str=strdup(yytext);
                                       strncopy(temp_str,temp_str,(strlen(temp_str)-1));
